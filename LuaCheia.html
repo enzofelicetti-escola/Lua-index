@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+            <title>🌙LUA🌙</title>
+    <header>
+ <ul>
+  <!-- Agora abre na MESMA aba, trocando o conteúdo atual -->
+  <li><a href="index.html">Principio</a></li>
+  <li><a href="LuaCrescente.html">Personagens</a></li>
+  <li><a href="LuaMinguante.html">Grimório</a></li>
+  <li><a href="LuaNova.html">Mundo</a></li>
+  <li><a href="LuaCheia.html">Combate</a></li>
+</ul>
+</header>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 { margin-top: 0; }
+
+        /* Layout Principal */
+        .main-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Coluna da Esquerda (Tabuleiro) */
+        .board-column {
+            flex: 1;
+            min-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Coluna da Direita (Anotações) */
+        .notes-column {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Controles (Cores e Botões) */
+        .controls {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-btn:hover { transform: scale(1.2); }
+        .color-btn.active { border: 3px solid #f1c40f; transform: scale(1.1); }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        #clear-btn { background-color: #e74c3c; }
+        #clear-btn:hover { background-color: #c0392b; }
+
+        #save-btn { background-color: #27ae60; }
+        #save-btn:hover { background-color: #219150; }
+
+        #load-btn { background-color: #3498db; }
+        #load-btn:hover { background-color: #2980b9; }
+
+        /* A Grade (Tabuleiro) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 60px); 
+            grid-template-rows: repeat(10, 60px);
+            gap: 2px;
+            background-color: #34495e;
+            padding: 5px;
+            border-radius: 4px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .cell {
+            background-color: #ecf0f1;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell:hover { background-color: #bdc3c7; }
+
+        .token {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .token:hover { transform: scale(1.1); }
+
+        /* Cores dos tokens */
+        .token.red { background-color: #e74c3c; }
+        .token.blue { background-color: #3498db; }
+        .token.green { background-color: #2ecc71; }
+        .token.yellow { background-color: #f1c40f; }
+        .token.purple { background-color: #9b59b6; }
+        .token.orange { background-color: #e67e22; }
+
+        /* Área de Anotações */
+        .notes-area {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 300px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        .notes-area:focus {
+            outline: 2px solid #3498db;
+        }
+
+        .notes-header {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Input de arquivo escondido */
+        #file-input { display: none; }
+
+    </style>
+</head>
+<body>
+
+    <h1>Confronto</h1>
+
+    <div class="controls">
+        <div class="color-picker">
+            <div class="color-btn red active" onclick="selectColor('red')"></div>
+            <div class="color-btn blue" onclick="selectColor('blue')"></div>
+            <div class="color-btn green" onclick="selectColor('green')"></div>
+            <div class="color-btn yellow" onclick="selectColor('yellow')"></div>
+            <div class="color-btn purple" onclick="selectColor('purple')"></div>
+            <div class="color-btn orange" onclick="selectColor('orange')"></div>
+        </div>
+        <button id="clear-btn" onclick="clearBoard()">Limpar Tabuleiro</button>
+        <button id="save-btn" onclick="saveGame()"> Salvar Jogo</button>
+        <button id="load-btn" onclick="document.getElementById('file-input').click()"> Carregar Jogo</button>
+        <input type="file" id="file-input" accept=".json" onchange="loadGame(this)">
+    </div>
+
+    <div class="main-container">
+        <!-- Coluna do Tabuleiro -->
+        <div class="board-column">
+            <div class="grid-container" id="grid">
+                <!-- Células geradas via JS -->
+            </div>
+        </div>
+
+        <!-- Coluna de Anotações -->
+        <div class="notes-column">
+            <div class="notes-header"> Anotações de Combate</div>
+            <textarea id="combat-notes" class="notes-area" placeholder="Ex:
+Iniciativa:
+1. Goblins (Vermelho) - 12
+2. Guerreiro (Azul) - 15
+
+HP:
+Goblin 1: 10/10
+Goblin 2: 5/10
+
+Anotações:
+O Goblin 2 está escondido atrás da caixa."></textarea>
+        </div>
+    </div>
+
+    <script>
+        const gridContainer = document.getElementById('grid');
+        const notesArea = document.getElementById('combat-notes');
+        const gridSize = 10; 
+        let currentColor = 'red';
+
+        // 1. Gerar a grade
+        function createGrid() {
+            gridContainer.innerHTML = ''; // Limpa antes de criar
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.addEventListener('click', function() {
+                    handleCellClick(this);
+                });
+                gridContainer.appendChild(cell);
+            }
+        }
+
+        // 2. Lógica de clique no tabuleiro
+        function handleCellClick(cell) {
+            if (cell.hasChildNodes()) {
+                cell.innerHTML = ''; // Remove token
+            } else {
+                const token = document.createElement('div');
+                token.classList.add('token', currentColor);
+                cell.appendChild(token);
+            }
+        }
+
+        // 3. Selecionar cor
+        function selectColor(color) {
+            currentColor = color;
+            const buttons = document.querySelectorAll('.color-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.color-btn.${color}`).classList.add('active');
+        }
+
+        // 4. Limpar tabuleiro
+        function clearBoard() {
+            if(confirm("Tem certeza que deseja limpar o tabuleiro?")) {
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => cell.innerHTML = '');
+            }
+        }
+
+        // --- SISTEMA DE SALVAR E CARREGAR ---
+
+        function saveGame() {
+            // Coletar dados do tabuleiro
+            const cells = document.querySelectorAll('.cell');
+            const boardState = [];
+            
+            cells.forEach(cell => {
+                if (cell.hasChildNodes()) {
+                    const token = cell.querySelector('.token');
+                    // Pega a classe de cor (ex: "token red" -> "red")
+                    const colorClass = token.classList[1]; 
+                    boardState.push(colorClass);
+                } else {
+                    boardState.push(null);
+                }
+            });
+
+            // Coletar anotações
+            const notes = notesArea.value;
+
+            // Criar objeto de dados
+            const gameData = {
+                board: boardState,
+                notes: notes
+            };
+
+            // Criar arquivo JSON
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "rpg_combate.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function loadGame(inputElement) {
+            const file = inputElement.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const gameData = JSON.parse(e.target.result);
+
+                    // Restaurar Tabuleiro
+                    const cells = document.querySelectorAll('.cell');
+                    cells.forEach((cell, index) => {
+                        cell.innerHTML = ''; // Limpa primeiro
+                        if (gameData.board[index]) {
+                            const token = document.createElement('div');
+                            token.classList.add('token', gameData.board[index]);
+                            cell.appendChild(token);
+                        }
+                    });
+
+                    // Restaurar Anotações
+                    if (gameData.notes) {
+                        notesArea.value = gameData.notes;
+                    }
+
+                    alert("Jogo carregado com sucesso!");
+                } catch (error) {
+                    alert("Erro ao carregar o arquivo. Verifique se é um arquivo válido.");
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Limpa o input para permitir carregar o mesmo arquivo novamente se necessário
+            inputElement.value = '';
+        }
+
+        // Inicia
+        createGrid();
+
+    </script>
+</body>
+</html>
