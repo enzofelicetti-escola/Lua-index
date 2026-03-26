@@ -79,11 +79,11 @@
         <div id="status" class="status"></div>
 <script>
         // --- CARREGAR ANOTAÇÕES ---
-        document.getElementById('texto').value = localStorage.getItem('anotacao2') || '';
+        document.getElementById('texto').value = localStorage.getItem('anotacao3') || '';
         
         // --- SALVAR AUTOMATICAMENTE ---
         document.getElementById('texto').addEventListener('input', function() {
-            localStorage.setItem('anotacao2', this.value);
+            localStorage.setItem('anotacao3', this.value);
             document.getElementById('status').textContent = 'Salvo!';
             setTimeout(() => {
                 document.getElementById('status').textContent = '';
