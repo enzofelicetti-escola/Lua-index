@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-            <title>🌙LUA🌙</title>
-    <header>
- <ul>
-  <!-- Agora abre na MESMA aba, trocando o conteúdo atual -->
-  <li><a href="index.html">Principio</a></li>
-  <li><a href="LuaCrescente.html">Personagens</a></li>
-  <li><a href="LuaMinguante.html">Grimório</a></li>
-  <li><a href="LuaNova.html">Mundo</a></li>
-  <li><a href="LuaCheia.html">Combate</a></li>
-</ul>
-</header>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙LUA🌙</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
+            background-color: #2c3e50; /* Mudei para escuro para o texto branco contrastar */
             color: white;
             display: flex;
             flex-direction: column;
@@ -27,6 +16,31 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+        }
+
+        /* Menu de Navegação */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 20px;
+        }
+        header ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        header a:hover {
+            text-decoration: underline;
         }
 
         h1 { margin-top: 0; }
@@ -108,11 +122,11 @@
         #load-btn { background-color: #3498db; }
         #load-btn:hover { background-color: #2980b9; }
 
-        /* A Grade (Tabuleiro) */
+        /* A Grade (Tabuleiro 10x10 combinado com o JS) */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(30, 30px); 
-            grid-template-rows: repeat(30, 30px);
+            grid-template-columns: repeat(10, 30px); 
+            grid-template-rows: repeat(10, 30px);
             gap: 2px;
             background-color: #34495e;
             padding: 5px;
@@ -123,7 +137,7 @@
         .cell {
             background-color: #ecf0f1;
             width: 30px;
-            height: 230px;
+            height: 30px; /* CORRIGIDO: Era 230px antes */
             cursor: pointer;
             position: relative;
             display: flex;
@@ -174,15 +188,25 @@
         .notes-header {
             margin-bottom: 10px;
             font-weight: bold;
-            color: #2c3e50;
+            color: white;
         }
 
         /* Input de arquivo escondido */
         #file-input { display: none; }
-
     </style>
 </head>
 <body>
+
+    <!-- Menu movido para dentro do Body -->
+    <header>
+        <ul>
+            <li><a href="index.html">Princípio</a></li>
+            <li><a href="LuaCrescente.html">Personagens</a></li>
+            <li><a href="LuaMinguante.html">Grimório</a></li>
+            <li><a href="LuaNova.html">Mundo</a></li>
+            <li><a href="LuaCheia.html">Combate</a></li>
+        </ul>
+    </header>
 
     <h1>Confronto</h1>
 
@@ -196,8 +220,8 @@
             <div class="color-btn orange" onclick="selectColor('orange')"></div>
         </div>
         <button id="clear-btn" onclick="clearBoard()">Limpar Tabuleiro</button>
-        <button id="save-btn" onclick="saveGame()"> Salvar Jogo</button>
-        <button id="load-btn" onclick="document.getElementById('file-input').click()"> Carregar Jogo</button>
+        <button id="save-btn" onclick="saveGame()">Salvar Jogo</button>
+        <button id="load-btn" onclick="document.getElementById('file-input').click()">Carregar Jogo</button>
         <input type="file" id="file-input" accept=".json" onchange="loadGame(this)">
     </div>
 
@@ -211,7 +235,7 @@
 
         <!-- Coluna de Anotações -->
         <div class="notes-column">
-            <div class="notes-header"> Anotações de Combate</div>
+            <div class="notes-header">Anotações de Combate</div>
             <textarea id="combat-notes" class="notes-area" placeholder="Ex:
 Iniciativa:
 1. Goblins (Vermelho) - 12
@@ -224,8 +248,7 @@ Goblin 2: 5/10
 Anotações:
 O Goblin 2 está escondido atrás da caixa.
                         
-Dica: cada quadrado é igual a 1,5 metros/5 pés.
-`Tip: Each square equals 1.5 meters / 5 feet.`"></textarea>
+Dica: cada quadrado é igual a 1,5 metros/5 pés."></textarea>
         </div>
     </div>
 
@@ -237,10 +260,11 @@ Dica: cada quadrado é igual a 1,5 metros/5 pés.
 
         // 1. Gerar a grade
         function createGrid() {
-            gridContainer.innerHTML = ''; // Limpa antes de criar
+            gridContainer.innerHTML = '';
             for (let i = 0; i < gridSize * gridSize; i++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
+                cell.dataset.index = i; // Guarda o índice da célula para o salvamento
                 cell.addEventListener('click', function() {
                     handleCellClick(this);
                 });
@@ -251,7 +275,7 @@ Dica: cada quadrado é igual a 1,5 metros/5 pés.
         // 2. Lógica de clique no tabuleiro
         function handleCellClick(cell) {
             if (cell.hasChildNodes()) {
-                cell.innerHTML = ''; // Remove token
+                cell.innerHTML = ''; 
             } else {
                 const token = document.createElement('div');
                 token.classList.add('token', currentColor);
@@ -267,91 +291,31 @@ Dica: cada quadrado é igual a 1,5 metros/5 pés.
             document.querySelector(`.color-btn.${color}`).classList.add('active');
         }
 
-        // 4. Limpar tabuleiro
+        // 4. Limpar o Tabuleiro
         function clearBoard() {
-            if(confirm("Tem certeza que deseja limpar o tabuleiro?")) {
-                const cells = document.querySelectorAll('.cell');
-                cells.forEach(cell => cell.innerHTML = '');
-            }
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => cell.innerHTML = '');
         }
 
-        // --- SISTEMA DE SALVAR E CARREGAR ---
-
+        // 5. Salvar o Jogo (Cria um arquivo JSON)
         function saveGame() {
-            // Coletar dados do tabuleiro
             const cells = document.querySelectorAll('.cell');
             const boardState = [];
-            
+
             cells.forEach(cell => {
                 if (cell.hasChildNodes()) {
                     const token = cell.querySelector('.token');
-                    // Pega a classe de cor (ex: "token red" -> "red")
-                    const colorClass = token.classList[1]; 
-                    boardState.push(colorClass);
-                } else {
-                    boardState.push(null);
+                    // Pega a segunda classe que representa a cor do token
+                    const color = token.classList[1]; 
+                    boardState.push({
+                        index: cell.dataset.index,
+                        color: color
+                    });
                 }
             });
 
-            // Coletar anotações
-            const notes = notesArea.value;
-
-            // Criar objeto de dados
-            const gameData = {
+            const gameState = {
                 board: boardState,
-                notes: notes
+                notes: notesArea.value
             };
 
-            // Criar arquivo JSON
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "rpg_combate.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        function loadGame(inputElement) {
-            const file = inputElement.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const gameData = JSON.parse(e.target.result);
-
-                    // Restaurar Tabuleiro
-                    const cells = document.querySelectorAll('.cell');
-                    cells.forEach((cell, index) => {
-                        cell.innerHTML = ''; // Limpa primeiro
-                        if (gameData.board[index]) {
-                            const token = document.createElement('div');
-                            token.classList.add('token', gameData.board[index]);
-                            cell.appendChild(token);
-                        }
-                    });
-
-                    // Restaurar Anotações
-                    if (gameData.notes) {
-                        notesArea.value = gameData.notes;
-                    }
-
-                    alert("Jogo carregado com sucesso!");
-                } catch (error) {
-                    alert("Erro ao carregar o arquivo. Verifique se é um arquivo válido.");
-                    console.error(error);
-                }
-            };
-            reader.readAsText(file);
-            
-            // Limpa o input para permitir carregar o mesmo arquivo novamente se necessário
-            inputElement.value = '';
-        }
-
-        // Inicia
-        createGrid();
-
-    </script>
-</body>
-</html>
