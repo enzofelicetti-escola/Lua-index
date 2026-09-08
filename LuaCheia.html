@@ -9,27 +9,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     <style>
 
-        /* =========================
-           CORPO DA PÁGINA
-        ========================= */
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             font-family: Arial, sans-serif;
-
             background-color: #ffffff;
-
             color: white;
 
             margin: 0;
-
             padding: 20px;
 
             min-height: 100vh;
-
-            box-sizing: border-box;
 
             overflow-x: auto;
         }
@@ -41,30 +35,23 @@
 
         header {
             width: 100%;
+            margin-bottom: 20px;
         }
 
         header ul {
-            margin: 0;
-            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
 
             list-style: none;
 
-            display: flex;
-
-            justify-content: center;
-
-            gap: 20px;
-        }
-
-        header li {
-            display: inline-block;
+            margin: 0;
+            padding: 0;
         }
 
         header a {
             color: black;
-
             text-decoration: none;
-
             font-weight: bold;
         }
 
@@ -74,11 +61,9 @@
         ========================= */
 
         h1 {
-            margin-top: 20px;
-
-            text-align: center;
-
             color: black;
+            text-align: center;
+            margin: 10px 0 20px 0;
         }
 
 
@@ -88,33 +73,23 @@
 
         .controls {
 
-            background: rgba(0, 0, 0, 0.3);
-
-            padding: 15px;
-
-            border-radius: 8px;
-
             display: flex;
+            align-items: center;
+            justify-content: center;
 
             gap: 15px;
 
-            align-items: center;
+            width: max-content;
 
-            flex-wrap: wrap;
+            margin: 0 auto 20px auto;
 
-            margin: 0 auto 15px auto;
+            padding: 15px;
 
-            width: fit-content;
+            background: rgba(0, 0, 0, 0.3);
 
-            justify-content: center;
-
-            box-sizing: border-box;
+            border-radius: 8px;
         }
 
-
-        /* =========================
-           CORES
-        ========================= */
 
         .color-picker {
 
@@ -127,7 +102,6 @@
         .color-btn {
 
             width: 30px;
-
             height: 30px;
 
             border-radius: 50%;
@@ -210,12 +184,14 @@
         }
 
 
-        /* =================================================
-           LAYOUT PRINCIPAL
-           
-           GRADE DE UM LADO
-           ANOTAÇÕES DO OUTRO
-        ================================================= */
+        /* =====================================================
+           ÁREA DOS DOIS ELEMENTOS
+
+           GRADE        ESPAÇO        ANOTAÇÕES
+           30x30          40px           400px
+
+           Tudo fica na MESMA LINHA.
+        ===================================================== */
 
         .main-container {
 
@@ -223,80 +199,84 @@
 
             flex-direction: row;
 
-            align-items: flex-start;
+            flex-wrap: nowrap;
 
-            justify-content: center;
+            align-items: flex-start;
 
             gap: 40px;
 
             width: max-content;
+
+            min-width: 1445px;
 
             margin: 0 auto;
         }
 
 
         /* =========================
-           COLUNA DA GRADE
+           TABULEIRO
         ========================= */
 
         .board-column {
 
-            flex: 0 0 auto;
+            width: 965px;
 
-            display: flex;
+            min-width: 965px;
 
-            flex-direction: column;
-
-            align-items: flex-start;
+            flex-shrink: 0;
         }
 
 
-        /* =================================================
-           GRADE 30 × 30
-           
+        /* =====================================================
+           GRADE
+
            30 COLUNAS
            30 LINHAS
            TOTAL = 900 SLOTS
-        ================================================= */
+        ===================================================== */
 
         .grid-container {
 
             display: grid;
 
-            grid-template-columns: repeat(30, 30px);
+            grid-template-columns:
+                repeat(30, 30px);
 
-            grid-template-rows: repeat(30, 30px);
+            grid-template-rows:
+                repeat(30, 30px);
 
             gap: 2px;
 
-            background-color: #34495e;
+            width: 965px;
+
+            height: 965px;
 
             padding: 5px;
+
+            background-color: #34495e;
 
             border-radius: 4px;
 
             box-shadow:
-                0 10px 20px rgba(0, 0, 0, 0.5);
-
-            width: max-content;
-
-            height: max-content;
+                0 10px 20px rgba(0,0,0,0.5);
 
             flex-shrink: 0;
         }
 
 
         /* =========================
-           CADA SLOT
+           SLOTS
         ========================= */
 
         .cell {
 
-            background-color: #ecf0f1;
-
             width: 30px;
-
             height: 30px;
+
+            min-width: 30px;
+            min-height: 30px;
+
+            background-color: #ecf0f1;
 
             cursor: pointer;
 
@@ -305,10 +285,7 @@
             display: flex;
 
             align-items: center;
-
             justify-content: center;
-
-            box-sizing: border-box;
 
             flex-shrink: 0;
         }
@@ -327,20 +304,18 @@
         .token {
 
             width: 24px;
-
             height: 24px;
 
             border-radius: 50%;
 
-            box-shadow:
-                0 4px 6px rgba(0, 0, 0, 0.3);
+            border: 2px solid
+                rgba(255,255,255,0.5);
 
-            border:
-                2px solid rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 4px 6px
+                rgba(0,0,0,0.3);
 
             cursor: pointer;
-
-            transition: transform 0.1s;
 
             box-sizing: border-box;
         }
@@ -353,66 +328,49 @@
 
 
         /* =========================
-           CORES DOS TOKENS
+           CORES
         ========================= */
 
         .token.red {
-
             background-color: #e74c3c;
         }
 
-
         .token.blue {
-
             background-color: #3498db;
         }
 
-
         .token.green {
-
             background-color: #2ecc71;
         }
 
-
         .token.yellow {
-
             background-color: #f1c40f;
         }
 
-
         .token.purple {
-
             background-color: #9b59b6;
         }
 
-
         .token.orange {
-
             background-color: #e67e22;
         }
 
 
         /* =========================
-           COLUNA DAS ANOTAÇÕES
+           ANOTAÇÕES
         ========================= */
 
         .notes-column {
 
-            flex: 0 0 400px;
-
             width: 400px;
 
-            display: flex;
+            min-width: 400px;
 
-            flex-direction: column;
+            max-width: 400px;
 
-            padding-top: 0;
+            flex-shrink: 0;
         }
 
-
-        /* =========================
-           TITULO DAS ANOTAÇÕES
-        ========================= */
 
         .notes-header {
 
@@ -426,11 +384,19 @@
         }
 
 
-        /* =========================
-           ÁREA DE ANOTAÇÕES
-        ========================= */
-
         .notes-area {
+
+            display: block;
+
+            width: 400px;
+
+            min-width: 400px;
+
+            height: 500px;
+
+            min-height: 500px;
+
+            padding: 15px;
 
             background-color: #ecf0f1;
 
@@ -439,8 +405,6 @@
             border: none;
 
             border-radius: 8px;
-
-            padding: 15px;
 
             font-family:
                 'Courier New',
@@ -451,14 +415,9 @@
 
             resize: vertical;
 
-            width: 400px;
-
-            min-height: 500px;
-
             box-shadow:
-                0 4px 6px rgba(0, 0, 0, 0.3);
-
-            box-sizing: border-box;
+                0 4px 6px
+                rgba(0,0,0,0.3);
         }
 
 
@@ -469,14 +428,13 @@
 
 
         /* =========================
-           INPUT DE ARQUIVO
+           INPUT
         ========================= */
 
         #file-input {
 
             display: none;
         }
-
 
     </style>
 
@@ -543,42 +501,35 @@
 
         <div class="color-picker">
 
-
             <div
                 class="color-btn red active"
                 onclick="selectColor('red')">
             </div>
-
 
             <div
                 class="color-btn blue"
                 onclick="selectColor('blue')">
             </div>
 
-
             <div
                 class="color-btn green"
                 onclick="selectColor('green')">
             </div>
-
 
             <div
                 class="color-btn yellow"
                 onclick="selectColor('yellow')">
             </div>
 
-
             <div
                 class="color-btn purple"
                 onclick="selectColor('purple')">
             </div>
 
-
             <div
                 class="color-btn orange"
                 onclick="selectColor('orange')">
             </div>
-
 
         </div>
 
@@ -617,32 +568,26 @@
             onchange="loadGame(this)"
         >
 
-
     </div>
 
 
-    <!-- =================================================
-         ÁREA PRINCIPAL
-         
-         GRADE ←→ ANOTAÇÕES
-    ================================================= -->
+    <!-- =====================================================
+         GRADE + ANOTAÇÕES
+    ===================================================== -->
 
     <div class="main-container">
 
 
         <!-- =========================
-             TABULEIRO
+             GRADE 30 × 30
         ========================= -->
 
         <div class="board-column">
 
-
             <div
                 class="grid-container"
                 id="grid">
-
             </div>
-
 
         </div>
 
@@ -652,7 +597,6 @@
         ========================= -->
 
         <div class="notes-column">
-
 
             <div class="notes-header">
 
@@ -677,7 +621,6 @@ Anotações:
 O Goblin 2 está escondido atrás da caixa."
             ></textarea>
 
-
         </div>
 
 
@@ -687,11 +630,12 @@ O Goblin 2 está escondido atrás da caixa."
     <script>
 
 
-        /* =================================================
-           CONFIGURAÇÃO
-           
-           30 × 30 = 900 SLOTS
-        ================================================= */
+        /* =====================================================
+           TAMANHO DO TABULEIRO
+
+           30 × 30
+           = 900 SLOTS
+        ===================================================== */
 
         const gridSize = 30;
 
@@ -708,25 +652,15 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* =================================================
+        /* =====================================================
            CRIAR GRADE
-        ================================================= */
+        ===================================================== */
 
         function createGrid() {
 
 
             gridContainer.innerHTML = '';
 
-
-            /*
-                30 × 30
-
-                30 slots na horizontal
-                30 slots na vertical
-
-                TOTAL:
-                900 SLOTS
-            */
 
             for (
                 let i = 0;
@@ -760,17 +694,15 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* =================================================
+        /* =====================================================
            CLIQUE NO SLOT
-        ================================================= */
+        ===================================================== */
 
         function handleCellClick(cell) {
 
 
             if (cell.hasChildNodes()) {
 
-
-                /* Remove o token */
 
                 cell.innerHTML = '';
 
@@ -779,8 +711,6 @@ O Goblin 2 está escondido atrás da caixa."
 
             else {
 
-
-                /* Cria um novo token */
 
                 const token =
                     document.createElement('div');
@@ -800,9 +730,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* =================================================
+        /* =====================================================
            SELECIONAR COR
-        ================================================= */
+        ===================================================== */
 
         function selectColor(color) {
 
@@ -837,9 +767,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* =================================================
+        /* =====================================================
            LIMPAR TABULEIRO
-        ================================================= */
+        ===================================================== */
 
         function clearBoard() {
 
@@ -871,9 +801,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* =================================================
+        /* =====================================================
            SALVAR JOGO
-        ================================================= */
+        ===================================================== */
 
         function saveGame() {
 
@@ -907,7 +837,6 @@ O Goblin 2 está escondido atrás da caixa."
                         boardState.push(
                             colorClass
                         );
-
 
                     }
 
@@ -972,9 +901,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* =================================================
+        /* =====================================================
            CARREGAR JOGO
-        ================================================= */
+        ===================================================== */
 
         function loadGame(inputElement) {
 
@@ -1002,8 +931,6 @@ O Goblin 2 está escondido atrás da caixa."
                                 e.target.result
                             );
 
-
-                        /* Restaurar tabuleiro */
 
                         const cells =
                             document.querySelectorAll(
@@ -1045,8 +972,6 @@ O Goblin 2 está escondido atrás da caixa."
                         );
 
 
-                        /* Restaurar anotações */
-
                         if (gameData.notes) {
 
                             notesArea.value =
@@ -1080,17 +1005,15 @@ O Goblin 2 está escondido atrás da caixa."
             reader.readAsText(file);
 
 
-            /* Permite carregar o mesmo arquivo novamente */
-
             inputElement.value = '';
 
         }
 
 
 
-        /* =================================================
-           INICIAR
-        ================================================= */
+        /* =====================================================
+           INICIAR TABULEIRO
+        ===================================================== */
 
         createGrid();
 
