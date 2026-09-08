@@ -9,68 +9,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <header>
-        <ul>
-            <li><a href="index.html">Principio</a></li>
-            <li><a href="LuaCrescente.html">Personagens</a></li>
-            <li><a href="LuaMinguante.html">Grimório</a></li>
-            <li><a href="LuaNova.html">Mundo</a></li>
-            <li><a href="LuaCheia.html">Combate</a></li>
-        </ul>
-    </header>
 
     <style>
 
+        /* =========================
+           CORPO DA PÁGINA
+        ========================= */
+
         body {
             font-family: Arial, sans-serif;
+
             background-color: #ffffff;
+
             color: white;
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0;
+
+            padding: 20px;
 
             min-height: 100vh;
 
-            margin: 0;
-            padding: 20px;
-
             box-sizing: border-box;
-        }
 
-
-        h1 {
-            margin-top: 0;
+            overflow-x: auto;
         }
 
 
         /* =========================
-           LAYOUT PRINCIPAL
+           MENU
         ========================= */
 
-        .main-container {
-    display: flex;
-    gap: 40px;
-    width: 100%;
-    max-width: 1800px;
-    align-items: flex-start;
-    justify-content: space-between;
-}
+        header {
+            width: 100%;
+        }
 
-.board-column {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
+        header ul {
+            margin: 0;
+            padding: 0;
 
-.notes-column {
-    flex: 1;
-    min-width: 300px;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-}
+            list-style: none;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+        }
+
+        header li {
+            display: inline-block;
+        }
+
+        header a {
+            color: black;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           TITULO
+        ========================= */
+
+        h1 {
+            margin-top: 20px;
+
+            text-align: center;
+
+            color: black;
+        }
+
 
         /* =========================
            CONTROLES
@@ -92,9 +102,9 @@
 
             flex-wrap: wrap;
 
-            margin-bottom: 15px;
+            margin: 0 auto 15px auto;
 
-            width: 100%;
+            width: fit-content;
 
             justify-content: center;
 
@@ -103,7 +113,7 @@
 
 
         /* =========================
-           SELETOR DE CORES
+           CORES
         ========================= */
 
         .color-picker {
@@ -161,8 +171,6 @@
             font-weight: bold;
 
             color: white;
-
-            transition: background 0.2s;
         }
 
 
@@ -202,22 +210,61 @@
         }
 
 
-        /* ==================================================
-           TABULEIRO
+        /* =================================================
+           LAYOUT PRINCIPAL
+           
+           GRADE DE UM LADO
+           ANOTAÇÕES DO OUTRO
+        ================================================= */
+
+        .main-container {
+
+            display: flex;
+
+            flex-direction: row;
+
+            align-items: flex-start;
+
+            justify-content: center;
+
+            gap: 40px;
+
+            width: max-content;
+
+            margin: 0 auto;
+        }
+
+
+        /* =========================
+           COLUNA DA GRADE
+        ========================= */
+
+        .board-column {
+
+            flex: 0 0 auto;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: flex-start;
+        }
+
+
+        /* =================================================
+           GRADE 30 × 30
            
            30 COLUNAS
            30 LINHAS
            TOTAL = 900 SLOTS
-        ================================================== */
+        ================================================= */
 
         .grid-container {
 
             display: grid;
 
-            /* 30 slots na horizontal */
             grid-template-columns: repeat(30, 30px);
 
-            /* 30 slots na vertical */
             grid-template-rows: repeat(30, 30px);
 
             gap: 2px;
@@ -231,10 +278,11 @@
             box-shadow:
                 0 10px 20px rgba(0, 0, 0, 0.5);
 
-            /* Impede o navegador de alterar o tamanho */
             width: max-content;
 
             height: max-content;
+
+            flex-shrink: 0;
         }
 
 
@@ -261,6 +309,8 @@
             justify-content: center;
 
             box-sizing: border-box;
+
+            flex-shrink: 0;
         }
 
 
@@ -271,7 +321,7 @@
 
 
         /* =========================
-           TOKEN
+           TOKENS
         ========================= */
 
         .token {
@@ -343,7 +393,41 @@
 
 
         /* =========================
-           ANOTAÇÕES
+           COLUNA DAS ANOTAÇÕES
+        ========================= */
+
+        .notes-column {
+
+            flex: 0 0 400px;
+
+            width: 400px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            padding-top: 0;
+        }
+
+
+        /* =========================
+           TITULO DAS ANOTAÇÕES
+        ========================= */
+
+        .notes-header {
+
+            margin-bottom: 10px;
+
+            font-weight: bold;
+
+            color: #2c3e50;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================
+           ÁREA DE ANOTAÇÕES
         ========================= */
 
         .notes-area {
@@ -367,7 +451,9 @@
 
             resize: vertical;
 
-            min-height: 300px;
+            width: 400px;
+
+            min-height: 500px;
 
             box-shadow:
                 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -382,16 +468,6 @@
         }
 
 
-        .notes-header {
-
-            margin-bottom: 10px;
-
-            font-weight: bold;
-
-            color: #2c3e50;
-        }
-
-
         /* =========================
            INPUT DE ARQUIVO
         ========================= */
@@ -401,6 +477,7 @@
             display: none;
         }
 
+
     </style>
 
 </head>
@@ -409,7 +486,52 @@
 <body>
 
 
-    <h1>Confronto</h1>
+    <!-- =========================
+         MENU
+    ========================= -->
+
+    <header>
+
+        <ul>
+
+            <li>
+                <a href="index.html">
+                    Principio
+                </a>
+            </li>
+
+            <li>
+                <a href="LuaCrescente.html">
+                    Personagens
+                </a>
+            </li>
+
+            <li>
+                <a href="LuaMinguante.html">
+                    Grimório
+                </a>
+            </li>
+
+            <li>
+                <a href="LuaNova.html">
+                    Mundo
+                </a>
+            </li>
+
+            <li>
+                <a href="LuaCheia.html">
+                    Combate
+                </a>
+            </li>
+
+        </ul>
+
+    </header>
+
+
+    <h1>
+        Confronto
+    </h1>
 
 
     <!-- =========================
@@ -421,35 +543,42 @@
 
         <div class="color-picker">
 
+
             <div
                 class="color-btn red active"
                 onclick="selectColor('red')">
             </div>
+
 
             <div
                 class="color-btn blue"
                 onclick="selectColor('blue')">
             </div>
 
+
             <div
                 class="color-btn green"
                 onclick="selectColor('green')">
             </div>
+
 
             <div
                 class="color-btn yellow"
                 onclick="selectColor('yellow')">
             </div>
 
+
             <div
                 class="color-btn purple"
                 onclick="selectColor('purple')">
             </div>
 
+
             <div
                 class="color-btn orange"
                 onclick="selectColor('orange')">
             </div>
+
 
         </div>
 
@@ -492,14 +621,18 @@
     </div>
 
 
-    <!-- =========================
+    <!-- =================================================
          ÁREA PRINCIPAL
-    ========================= -->
+         
+         GRADE ←→ ANOTAÇÕES
+    ================================================= -->
 
     <div class="main-container">
 
 
-        <!-- TABULEIRO -->
+        <!-- =========================
+             TABULEIRO
+        ========================= -->
 
         <div class="board-column">
 
@@ -508,18 +641,15 @@
                 class="grid-container"
                 id="grid">
 
-                <!--
-                    As 900 células
-                    serão criadas pelo JavaScript
-                -->
-
             </div>
 
 
         </div>
 
 
-        <!-- ANOTAÇÕES -->
+        <!-- =========================
+             ANOTAÇÕES
+        ========================= -->
 
         <div class="notes-column">
 
@@ -557,12 +687,11 @@ O Goblin 2 está escondido atrás da caixa."
     <script>
 
 
-        /* ==================================================
-           CONFIGURAÇÃO DO TABULEIRO
+        /* =================================================
+           CONFIGURAÇÃO
            
-           30 x 30
-           = 900 SLOTS
-        ================================================== */
+           30 × 30 = 900 SLOTS
+        ================================================= */
 
         const gridSize = 30;
 
@@ -579,14 +708,12 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
-           CRIAR A GRADE
-        ================================================== */
+        /* =================================================
+           CRIAR GRADE
+        ================================================= */
 
         function createGrid() {
 
-
-            /* Limpa a grade antes de criar */
 
             gridContainer.innerHTML = '';
 
@@ -594,11 +721,11 @@ O Goblin 2 está escondido atrás da caixa."
             /*
                 30 × 30
 
-                30 colunas
-                30 linhas
+                30 slots na horizontal
+                30 slots na vertical
 
                 TOTAL:
-                900 células
+                900 SLOTS
             */
 
             for (
@@ -633,33 +760,27 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
-           CLIQUE NO TABULEIRO
-        ================================================== */
+        /* =================================================
+           CLIQUE NO SLOT
+        ================================================= */
 
         function handleCellClick(cell) {
 
 
-            /*
-                Se já tiver um token,
-                remove o token.
-            */
-
             if (cell.hasChildNodes()) {
 
+
+                /* Remove o token */
 
                 cell.innerHTML = '';
 
 
             }
 
-            /*
-                Se estiver vazio,
-                cria um token.
-            */
-
             else {
 
+
+                /* Cria um novo token */
 
                 const token =
                     document.createElement('div');
@@ -679,9 +800,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
+        /* =================================================
            SELECIONAR COR
-        ================================================== */
+        ================================================= */
 
         function selectColor(color) {
 
@@ -716,9 +837,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
+        /* =================================================
            LIMPAR TABULEIRO
-        ================================================== */
+        ================================================= */
 
         function clearBoard() {
 
@@ -750,9 +871,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
+        /* =================================================
            SALVAR JOGO
-        ================================================== */
+        ================================================= */
 
         function saveGame() {
 
@@ -801,13 +922,9 @@ O Goblin 2 está escondido atrás da caixa."
             );
 
 
-            /* Salvar anotações */
-
             const notes =
                 notesArea.value;
 
-
-            /* Criar dados do jogo */
 
             const gameData = {
 
@@ -817,8 +934,6 @@ O Goblin 2 está escondido atrás da caixa."
 
             };
 
-
-            /* Criar arquivo JSON */
 
             const dataStr =
                 "data:text/json;charset=utf-8," +
@@ -857,9 +972,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
+        /* =================================================
            CARREGAR JOGO
-        ================================================== */
+        ================================================= */
 
         function loadGame(inputElement) {
 
@@ -947,7 +1062,6 @@ O Goblin 2 está escondido atrás da caixa."
 
                     }
 
-
                     catch (error) {
 
 
@@ -966,10 +1080,7 @@ O Goblin 2 está escondido atrás da caixa."
             reader.readAsText(file);
 
 
-            /*
-                Limpa o input para permitir
-                carregar o mesmo arquivo novamente.
-            */
+            /* Permite carregar o mesmo arquivo novamente */
 
             inputElement.value = '';
 
@@ -977,9 +1088,9 @@ O Goblin 2 está escondido atrás da caixa."
 
 
 
-        /* ==================================================
-           INICIAR TABULEIRO
-        ================================================== */
+        /* =================================================
+           INICIAR
+        ================================================= */
 
         createGrid();
 
